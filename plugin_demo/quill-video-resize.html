@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quill Image Resize Module Demo</title>
+    <script src="http://cdn.quilljs.com/1.2.2/quill.min.js"></script>
+    <link href="http://cdn.quilljs.com/1.2.2/quill.snow.css" rel="stylesheet">
+    <script src="quill-image-resize.min.js"></script>
+    <!-- <script src="quill-image-url-drop.js"></script> -->
+    <script src="quill-video-resize.js" type="module"></script>
+    <link href="quill-video-resize.css" rel="stylesheet">
+
+</head>
+
+<body>
+<h1>Quill Image Resize Module Demo</h1>
+<div id="editor" style="max-height:500px;overflow:auto">
+    <p>Click on the Image Below to resize</p>
+    <p><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTph9FaVhogN-kBywPyLbT8Ac1u7Lw2AITPXjnu7Uk3OwubySgHfQ"></p>
+    <p>Some initial <strong>bold</strong> text</p>
+    <p><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD0NaHg1nn6Q0DYZ2Ds7IStSkOivKqbGpahbpSwcVs0Z_Dm7iK"></p>
+</div>
+<p>Also see <a href="https://github.com/kensnyder/quill-image-drop-module">quill-image-drop-module</a>,
+    a module that enables copy-paste and drag/drop for Quill.</p>
+<script>
+   
+Quill.register({ 'modules/video': Video }); // register with Quill
+var quill = new Quill('#editor', {
+	theme: 'snow',
+	modules: {
+        toolbar: {
+            container: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['clean'],
+            // ['emoji'],
+            ['link', 'image', 'video']
+            ]
+            ,
+            handlers: {
+            'emoji': function () {}
+            }
+        },
+        video: {},
+        imageResize: {} //https://github.com/kensnyder/quill-image-resize-module
+        // ImageResize: {
+        //     modules: [ 'Resize', 'DisplaySize', 'Toolbar' ]
+
+        //     handleStyles: {
+        //         backgroundColor: 'black',
+        //         border: 'none',
+        //         color: white
+        //         // other camelCase styles for size display
+        //     }
+
+        //     displayStyles: {
+        //         backgroundColor: 'black',
+        //         border: 'none',
+        //         color: white
+        //         // other camelCase styles for size display
+        //     }
+
+        //     // ...
+        //     toolbarStyles: {
+        //         backgroundColor: 'black',
+        //         border: 'none',
+        //         color: white
+        //         // other camelCase styles for size display
+        //     },
+        //     toolbarButtonStyles: {
+        //         // ...
+        //     },
+        //     toolbarButtonSvgStyles: {
+        //         // ...
+        //     },
+        // }
+	}
+});
+
+// // You must add the editor to the root element after the editor was created and before the video embed!
+// quill.root.quill = quill;
+
+// // Embed the video into the editor:
+// let src = 'https://www.youtube.com/embed/o-KdQiObAGM'
+// quill.insertEmbed(index, 'video', src, 'user');
+
+</script>
+<!-- 
+<style>
+.ql-editor .td-video .td-align-left:after{ 
+  content: "\ \21E4"; 
+} 
+.ql-editor .td-video .td-align-center:after{ 
+  content: "\ \2194";
+  position: relative;
+  left: -2px;
+  top: -1px;
+} 
+.ql-editor .td-video .td-align-right:after{
+  content: "\ \21E5"; 
+}
+</style> -->
+
+
+</body>
+
+</html>

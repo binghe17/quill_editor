@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quill Image Resize Module Demo</title>
+    <script src="http://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link href="http://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="http://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+    <script src="quill-blot-formatter.min.js"></script>
+    <script src="quill-image-drop.min.js"></script>
+    <script src="clickToTouch.js"></script>
+</head>
+
+<body>
+<h1>Quill Image Resize Module Demo</h1>
+<div id="editor" style="max-height:500px;overflow:auto">
+        <div id="quill-container">
+            <p>Hi! Here is an image...</p>
+            <p>A Video!</p>
+            <div>
+
+                <iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/WNmnpGC_hgE" height="196"
+                width="391"></iframe>
+            </div>
+            
+            <div><span>111111</span><span>2222222</span></div>
+
+            <p><img src="https://pgnqdrjultom1827145.cdn.ntruss.com/img/6e/8e/6e8e061c960e8183ea1006bbee330cc30a2f84f64813ca4101d2b0a91ee7d40c_v1.jpg" /></p>
+        </div>
+        <iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://player.vimeo.com/video/352494023/" data-blot-formatter-unclickable-bound="true" width="367" height="183.5" style=""></iframe>
+</div>
+
+
+
+<style>
+#editor iframe {display:inline-block}
+</style>
+<script>
+Quill.register('modules/blotFormatter', QuillBlotFormatter.default);
+
+var quill = new Quill('#editor', {
+    // theme: "snow",
+    theme: "bubble",
+    scrollingContainer: "#scrolling-container",
+	modules: {
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'header': 1 }, { 'header': 2 }],
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+                ['clean'],
+                // ['emoji'],
+                ['link', 'image', 'video']
+            ],
+            // handlers: {
+            // 'emoji': function () {}
+            // }
+        },
+        blotFormatter: { //https://github.com/Fandom-OSS/quill-blot-formatter
+            // see config options below
+            // specs: [
+            //     // CustomImageSpec,
+            // ],
+            overlay: {
+                style: {
+                    border: '2px solid red',
+                }
+            }
+            ,resize:{
+                // handleStyle
+            }
+        }
+
+	}
+});
+
+
+
+</script>
+</body>
+
+</html>
