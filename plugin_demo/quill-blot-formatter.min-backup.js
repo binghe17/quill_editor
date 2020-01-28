@@ -1189,9 +1189,8 @@
                 var r = i(this, (t.__proto__ || Object.getPrototypeOf(t)).call(this, e));
                 return r.onTextChange = function() {
                     Array.from(document.querySelectorAll(r.selector + ":not([" + f + "])")).forEach(function(e) {
-                        e.setAttribute(f, "true");
-                        e.addEventListener("mouseenter", r.onMouseEnter);
-                        // document.querySelector('.blot-formatter__proxy-image').addEventListener("mouseout", r.onMouseOut);
+                        e.setAttribute(f, "true"),
+                        e.addEventListener("mouseenter", r.onMouseEnter)
                     })
                 }
                 ,
@@ -1199,13 +1198,6 @@
                     var t = e.target;
                     t instanceof HTMLElement && (r.nextUnclickable = t,
                     r.repositionProxyImage(r.nextUnclickable))
-                }
-                ,
-                r.onMouseOut = function(e) {
-                    var t = e.target;
-                    t.style.display = 'none';
-                    t.style.overflow = 'auto';
-                    // console.log(t)
                 }
                 ,
                 r.onProxyImageClick = function() {
@@ -1267,7 +1259,7 @@
                 value: function() {
                     Object.assign(this.proxyImage.style, {
                         display: "none"
-                    }) 
+                    })
                 }
             }, {
                 key: "repositionProxyImage",
