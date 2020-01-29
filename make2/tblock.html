@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="selection.js"></script>
+    <style>
+
+
+    /* -------- contenteditable=false인 태그에 사용/ ( Zero Width No-Break Space:  "&#65279;" = "﻿" ) */
+    .tblock::before {content:"﻿"}
+    .tblock::after {content:"﻿"}
+    /* --------- */
+
+
+
+    #testblock {padding: 30px;}
+    .tblock {border:1px solid #aaa; background: #ddd;}
+    .tblock > div{border:1px solid #888; margin: 30px; }
+
+    </style>
+</head>
+<body>
+    <pre>
+        contenteditable="true"속성을 가진 태그안에 
+        contenteditable="false"인 직속 자식의 첫과 끝에 텍스트가 들어가면 안된다. ("&#65279;"만 가능)
+    </pre>
+
+    <div id="testblock" contenteditable="true" designMode="on">
+        예제: (여기클릭하고 상하좌우 이동해보기.)
+        <div>----div------</div>
+        <p>-----p------</p>
+
+        <div id="test1">
+            asdjflajsdf
+            <div>asdjfkasjdfl
+                input<input type="text">
+                img <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD0NaHg1nn6Q0DYZ2Ds7IStSkOivKqbGpahbpSwcVs0Z_Dm7iK">
+                <iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/WNmnpGC_hgE" height="196" width="391"></iframe>
+
+                <b>bbbbb</b>
+            </div>
+        </div>
+  
+        <section class="tblock" contenteditable="false">
+            ////커서 안에로 이동안됨
+            <div>div</div>
+            <div>div<div> > div</div><span> > span</span></div>
+            input<input type="text">
+            img <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRD0NaHg1nn6Q0DYZ2Ds7IStSkOivKqbGpahbpSwcVs0Z_Dm7iK">
+            <iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/WNmnpGC_hgE" height="196" width="391"></iframe>
+            <div contenteditable="true" designMode="on" style="background: #fff;">
+                ---------
+                <section class="tblock" contenteditable="false">
+                    ////커서 안에로 이동안됨
+                    <div>.tblock 안에 <b>.tblock</b></div>
+                    ////커서 안에로 이동안됨
+                </section>
+                ----------
+            </div>
+            ////커서 안에로 이동안됨
+        </section>
+        2222    
+        <section class="tblock" contenteditable="false"><br>
+           용도: 이미지, 해시태그,
+        </section>
+        3333
+        <br><br>
+        수정부분에서 커서의 상하좌우를 이동해도 커서가 흰색부분만 진입되게 하는 예제. (에디터 제작시 필수 기능)
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+
+    <script>
+
+        function tblockBox(sel){
+            // $(sel).wrap('<section class="tblock" contenteditable="false">')
+            // console.log($(sel).get(0))
+            $(sel).html('<section class="tblock" contenteditable="false">'+ $(sel).get(0).outerHTML +'</section>&nbsp;');
+        }
+        tblockBox('#test1');
+
+
+
+        // $('#testblock .tblock').click(function(e){
+        //     e.preventDefault();
+        //     // console.log(this, e.target)
+        //     // SelectionManager.select(e.target)
+        //     console.log($(e.target).index())
+
+        //     // console.log(document.getSelection())
+
+        // })
+        // $('#testblock .tblock').keyup(function(e){
+        //     e.preventDefault;
+        //     console.log(e, e.key)
+        //     if(e.key == 'Backspace') console.log(e.target)
+        // })
+    
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quill Image Resize Module Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/default.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+
+    <script src="http://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link href="http://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- <link href="http://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet"> -->
+
+    <script src="src/quill-blot-formatter.min.js"></script>
+    <script src="src/quill-image-drop.min.js"></script>
+    <script src="src/clickToTouch.js"></script>
+
+</head>
+
+<body>
+<h1>Quill Image Resize Module Demo</h1>
+<div id="editor" style="max-height:500px;overflow:auto">
+        <div id="quill-container">
+            asdfasd
+            <pre>
+            <p>//Hi! Here is an image...</p>
+            <p>function ff(){ return true;}</p>
+
+            </pre>
+            <p>A Video!</p>
+            <div>
+                <iframe class="ql-video avoid-clicks" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/WNmnpGC_hgE" height="196"
+                width="391"></iframe>
+            </div>
+            
+
+
+            <p><img src="https://pgnqdrjultom1827145.cdn.ntruss.com/img/6e/8e/6e8e061c960e8183ea1006bbee330cc30a2f84f64813ca4101d2b0a91ee7d40c_v1.jpg" /></p>
+        </div>
+        <iframe class="ql-video avoid-clicks" frameborder="0" allowfullscreen="true" src="https://player.vimeo.com/video/352494023/" data-blot-formatter-unclickable-bound="true" width="367" height="183.5"></iframe>
+</div>
+<div>count: <span id="counter"></span></div>
+
+<style>
+#editor iframe {display:inline-block;}
+.avoid-clicks { pointer-events: none; cursor: default; }
+
+/* .blot-formatter__proxy-image {background: #ccc;} */
+/* #editor p::before {content: '&#65279;'}
+#editor p::after {content: '&#65279;'} */
+</style>
+
+<script>
+$('.ql-editor').designMode = 'on';
+
+
+hljs.configure({useBR: true, languages: ['javascript']});
+document.querySelectorAll('#editor pre').forEach((block) => {
+  hljs.highlightBlock(block);
+});
+
+//줄바꿈시 p태그를 div로 바꿈.
+var Block = Quill.import('blots/block');
+Block.tagName = 'div'; //p -> div
+Quill.register(Block);
+
+//video resize 사이즈 설정
+Quill.register('modules/blotFormatter', QuillBlotFormatter.default);
+
+//----------------------Building a Custom Module  -------  https://quilljs.com/guides/building-a-custom-module/
+//1.
+// Quill.register('modules/counter', function(quill, options) {
+//   var container = document.querySelector('#counter');
+//   quill.on('text-change', function() {
+//     var text = quill.getText();
+//     // There are a couple issues with counting words
+//     // this way but we'll fix these later
+//     container.innerText = text.split(/\s+/).length;
+//   });
+// });
+
+//2.Using Options
+// var Counter = function(quill, options) {
+//   this.quill = quill;
+//   this.options = options;
+//   var container = document.querySelector(options.container);
+//   var _this = this;
+//   quill.on('text-change', function() {
+//     var length = _this.calculate();
+//     options.unit = options.unit || 'char'
+//     container.innerText = length + ' ' + options.unit + 's';
+//   });
+// };
+
+// Counter.prototype.calculate = function() {
+//   var text = this.quill.getText();
+//   if (this.options.unit === 'word') {
+//     return text.split(/\s+/).length;
+//   } else {
+//     return text.length;
+//   }
+// };
+class Counter {
+  constructor(quill, options) {
+    this.quill = quill;
+    this.options = options;
+    this.container = document.querySelector(options.container);
+    quill.on('text-change', this.update.bind(this));
+    this.update();  // Account for initial contents
+  }
+  calculate() {
+    let text = this.quill.getText();
+    if (this.options.unit === 'word') {
+      text = text.trim();
+      // Splitting empty text returns a non-empty array
+      return text.length > 0 ? text.split(/\s+/).length : 0;
+    } else {
+      return text.length;
+    }
+  }
+  update() {
+    var length = this.calculate();
+    var label = this.options.unit || 'char';
+    if (length !== 1) {
+      label += 's';
+    }
+    this.container.innerText = length + ' ' + label;
+  }
+}
+
+Quill.register('modules/counter', Counter);
+
+
+
+var editor = new Quill('#editor', {
+	modules: {
+        // formula: true, //수학공식
+        // counter: true, //1
+        counter: { //2
+            container: '#counter',
+            // unit: 'word'
+        },
+        syntax: true, //highlight
+        toolbar: {
+            container: [
+                ['bold', 'italic', 'underline', 'strike'],
+                ['link', 'image', 'video'],
+                [{ 'header': 1 }, { 'header': 2 }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                ['blockquote', 'code-block'],
+                [{ 'align': [] }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+                [{ 'font': [] }],
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'color': [] }, { 'background': [] }],
+                ['clean'],
+                // ['emoji'],
+            ],
+            // handlers: {
+            //     'emoji': function () {}
+            // }
+        },
+        blotFormatter: { //https://github.com/Fandom-OSS/quill-blot-formatter
+            // see config options below
+            // specs: [
+            //     // CustomImageSpec,
+            // ],
+            overlay: {
+                style: {
+                    border: '2px solid red',
+                }
+            }
+            ,resize:{
+                // handleStyle
+            }
+        }
+
+    },
+    // scrollingContainer: "#scrolling-container",
+    placeholder: 'Compose an epic...',
+    theme: "snow",
+    // theme: "bubble",
+});
+
+
+
+var counter = editor.getModule('counter');
+console.log(counter.calculate(), 'words');
+
+
+
+// //禁止调试
+// Quill.debug(false);
+// //自定义的事件
+// (editor || window.editor_quill).on("text-change", function(delta, oldDelta, source) {
+//     if('user' === source) {
+//         //打印当前的内容  quill.container.firstChild.innerHTML
+//         console.log((editor || window.editor_quill).container.firstChild.innerHTML);
+//     }
+// });
+var toolbar = editor.getModule('toolbar');
+// toolbar.addHandler("image", function(e) {
+//     //console.log("自定义的事件-图片");               	   
+//     (editor || window.editor_quill).insertEmbed((window.editor_insertNum || 10000000000000), 'image', "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIRomHk_lUmIFno6KrnL7wMmCrVDew-EQpT5EC5mFJS0xp9lPhOw");
+// });
+// //视频 http://www.w3school.com.cn/i/movie.ogg
+// toolbar.addHandler("video", function(e) {
+//     //10000000000000 = 1兆亿保证永远插在最后面
+//     (editor || window.editor_quill).insertEmbed((window.editor_insertNum || 10000000000000), 'video', "http://www.w3school.com.cn/i/movie.ogg");
+// });
+
+// toolbar.addHandler("code-block", function(e) {
+//     //10000000000000 = 1兆亿保证永远插在最后面
+//     console.log(111111), editor;
+//     editor.insertEmbed(1000000000, 'div', "aaaaaaaa");
+// });
+
+
+
+
+
+
+//PC 또는 모바일 여부
+function isPCMobile(){
+    // console.log(navigator)
+    var mobileArr = new Array("iPhone", "iPod", "BlackBerry", "Android", "Windows CE", "LG", "MOT", "SAMSUNG", "SonyEricsson");
+    for(var txt in mobileArr){
+        if(navigator.userAgent.match(mobileArr[txt]) != null){
+            // return mobileArr[txt];
+            return 'mobile';
+        }
+    }
+    var filter = "win16|win32|win64|mac|macintel"; 
+    if ( navigator.platform ) { 
+        if ( filter.indexOf( navigator.platform.toLowerCase() ) < 0 ) { 
+            // console.log('moblie')
+        }
+        else return 'pc';
+    }
+    return 'other';
+}
+console.log(isPCMobile())
+
+
+
+
+
+
+</script>
+</body>
+
+</html>
